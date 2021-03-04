@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts | Hielke Walinga</title>
-    <link>hielkewalinga.nl/post/</link>
-      <atom:link href="hielkewalinga.nl/post/index.xml" rel="self" type="application/rss+xml" />
+    <link>/post/</link>
+      <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
     <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Wed, 03 Mar 2021 22:22:54 +0100</lastBuildDate>
     <image>
-      <url>/hielkewalinga.nl/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
+      <url>/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
       <title>Posts</title>
-      <link>hielkewalinga.nl/post/</link>
+      <link>/post/</link>
     </image>
     
     <item>
       <title>Test</title>
-      <link>hielkewalinga.nl/post/test/</link>
+      <link>/post/test/</link>
       <pubDate>Wed, 03 Mar 2021 22:22:54 +0100</pubDate>
-      <guid>hielkewalinga.nl/post/test/</guid>
+      <guid>/post/test/</guid>
       <description>&lt;p&gt;First blog post! This is just a test.&lt;/p&gt;
 </description>
     </item>
