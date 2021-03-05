@@ -3,42 +3,42 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>hielkewalinga.nl/talk/example-talk/</loc>
+    <loc>http://hielkewalinga.nl/talk/example-talk/</loc>
     <lastmod>2030-06-01T13:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/</loc>
+    <loc>http://hielkewalinga.nl/</loc>
     <lastmod>2030-06-01T13:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/event/</loc>
+    <loc>http://hielkewalinga.nl/event/</loc>
     <lastmod>2030-06-01T13:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/post/</loc>
+    <loc>http://hielkewalinga.nl/post/</loc>
     <lastmod>2021-03-03T22:22:54+01:00</lastmod>
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/post/test/</loc>
+    <loc>http://hielkewalinga.nl/post/test/</loc>
     <lastmod>2021-03-03T22:22:54+01:00</lastmod>
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/slides/</loc>
+    <loc>http://hielkewalinga.nl/slides/</loc>
     <lastmod>2019-02-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/slides/example/</loc>
+    <loc>http://hielkewalinga.nl/slides/example/</loc>
     <lastmod>2019-02-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/admin/</loc>
+    <loc>http://hielkewalinga.nl/admin/</loc>
   </url>
   
   <url>
@@ -46,7 +46,7 @@
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/categories/</loc>
+    <loc>http://hielkewalinga.nl/categories/</loc>
   </url>
   
   <url>
@@ -54,15 +54,15 @@
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/publication_types/</loc>
+    <loc>http://hielkewalinga.nl/publication_types/</loc>
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/publication/</loc>
+    <loc>http://hielkewalinga.nl/publication/</loc>
   </url>
   
   <url>
-    <loc>hielkewalinga.nl/tags/</loc>
+    <loc>http://hielkewalinga.nl/tags/</loc>
   </url>
   
 </urlset>
