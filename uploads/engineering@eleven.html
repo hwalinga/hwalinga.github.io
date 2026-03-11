@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>engineering@eleven — Workshop Curriculum</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+  --bg:        #f0ede8;
+  --surface:   #faf9f7;
+  --card:      #ffffff;
+  --border:    #e5dfd7;
+  --shadow:    rgba(60,40,20,0.07);
+  --shadow-lg: rgba(60,40,20,0.14);
+  --text:      #2d2620;
+  --muted:     #8c7e72;
+  --dim:       #c0b0a4;
+  --radius: 18px;
+  --radius-sm: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 1.4rem 2rem .8rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: .8rem;
+  opacity: 0;
+  animation: fadeUp .5s ease forwards;
+}
+
+.brand-logo {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fira Code', monospace;
+  font-size: .62rem;
+  font-weight: 500;
+  color: white;
+  box-shadow: 0 4px 14px rgba(255,107,53,.35);
+  flex-shrink: 0;
+}
+
+.brand-wordmark {
+  font-family: 'Fira Code', monospace;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+.brand-wordmark strong { color: var(--text); font-weight: 700; }
+
+h1 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -.035em;
+  color: var(--text);
+  margin-bottom: .4rem;
+  opacity: 0;
+  animation: fadeUp .5s ease forwards .1s;
+}
+
+h1 em {
+  font-style: normal;
+  background: linear-gradient(100deg, #ff6b35 20%, #f7931e 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: .82rem;
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.5;
+  opacity: 0;
+  animation: fadeUp .5s ease forwards .2s;
+}
+
+/* ── CONTROLS ── */
+.controls {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: .6rem 2rem .8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  opacity: 0;
+  animation: fadeUp .5s ease forwards .3s;
+}
+
+.pill {
+  font-family: 'Nunito', sans-serif;
+  font-size: .72rem;
+  font-weight: 800;
+  padding: .28rem .8rem;
+  border-radius: 100px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .18s ease;
+  box-shadow: 0 2px 6px var(--shadow);
+}
+.pill:hover { border-color: #bbb0a4; color: var(--text); transform: translateY(-1px); }
+.pill.active { background: var(--text); border-color: var(--text); color: white; box-shadow: 0 4px 14px var(--shadow-lg); }
+.pill.active.hot-pill { background: linear-gradient(135deg,#ff6b35,#e8334a); border-color: transparent; }
+.pill.active.rec-pill { background: linear-gradient(135deg,#2a9d8f,#06d6a0); border-color: transparent; }
+
+.c-divider { width: 1.5px; background: var(--border); align-self: stretch; margin: .15rem 0; }
+
+/* ── GRID ── */
+.grid {
+  margin: 0 auto;
+  padding: 0 2rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: .6rem;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  padding: .85rem 1rem .75rem;
+  cursor: grab;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, opacity .18s;
+  box-shadow: 0 2px 10px var(--shadow);
+  position: relative;
+  user-select: none;
+}
+
+.card-init {
+  animation: fadeUp .42s ease forwards;
+}
+
+.card:hover {
+  box-shadow: 0 10px 30px var(--shadow-lg);
+  transform: translateY(-3px);
+}
+
+.card.dragging {
+  cursor: grabbing;
+  opacity: .35;
+  box-shadow: 0 22px 55px var(--shadow-lg);
+  z-index: 100;
+}
+
+.card.drag-over-before {
+  box-shadow: -4px 0 0 0 #ff6b35, 0 10px 30px var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.card.drag-over-after {
+  box-shadow: 4px 0 0 0 #ff6b35, 0 10px 30px var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* ── TOP ROW ── */
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .8rem;
+  margin-bottom: .5rem;
+}
+
+.card-tag {
+  font-family: 'Fira Code', monospace;
+  font-size: .6rem;
+  font-weight: 500;
+  padding: .22rem .65rem;
+  border-radius: 100px;
+  background: var(--tag-bg, #f0ede8);
+  color: var(--tag-color, var(--muted));
+  white-space: nowrap;
+  flex-shrink: 0;
+  border: 1.5px solid color-mix(in srgb, var(--tag-color, #aaa) 20%, transparent);
+}
+
+.card-num { font-family: 'Fira Code', monospace; font-size: .55rem; color: var(--dim); margin-bottom: .1rem; }
+.card-title { font-size: .88rem; font-weight: 800; line-height: 1.2; color: var(--text); letter-spacing: -.02em; }
+
+/* ── BADGES ── */
+.card-badges { display: flex; gap: .3rem; flex-wrap: wrap; margin-bottom: .45rem; }
+.badge { font-size: .6rem; font-weight: 700; padding: .12rem .45rem; border-radius: 100px; }
+.badge-hot { background: #fff0ed; color: #e85d3a; }
+.badge-rec { background: #edf7f6; color: #2a9d8f; }
+
+/* ── DESC ── */
+.card-desc { font-size: .78rem; color: var(--muted); line-height: 1.5; margin-bottom: .5rem; }
+
+/* ── TOPICS ── */
+.topics { display: none; margin-bottom: .85rem; padding-top: .6rem; border-top: 1.5px solid var(--border); }
+.card.expanded .topics { display: block; }
+.topics ul { list-style: none; display: flex; flex-direction: column; gap: .28rem; }
+.topics li {
+  font-family: 'Fira Code', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  padding-left: 1.1rem;
+  position: relative;
+  line-height: 1.5;
+}
+.topics li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--tag-color, var(--muted));
+  font-weight: 700;
+}
+
+/* ── FOOTER ROW ── */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: .5rem;
+  border-top: 1.5px solid var(--border);
+  gap: .5rem;
+}
+
+/* ── VOTE ── */
+.vote-wrap { display: flex; align-items: center; gap: .45rem; }
+
+.vote-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: .7rem;
+  font-weight: 800;
+  padding: .2rem .6rem;
+  border-radius: 100px;
+  border: 2px solid var(--border);
+  background: white;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .15s ease;
+  display: flex; align-items: center; gap: .3rem;
+}
+.vote-btn:hover { border-color: #ff6b35; color: #ff6b35; background: #fff4f1; }
+.vote-btn.voted {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 3px 10px rgba(255,107,53,.3);
+}
+
+.vote-count {
+  text-align: center;
+  font-family: 'Fira Code', monospace;
+  font-size: .7rem;
+  font-weight: 500;
+  color: var(--muted);
+  min-width: 1.2rem;
+}
+
+/* ── EXPAND BTN ── */
+.expand-btn {
+  font-size: .68rem;
+  font-weight: 800;
+  color: var(--dim);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: .2rem .4rem;
+  border-radius: var(--radius-sm);
+  transition: all .15s;
+}
+.expand-btn:hover { background: var(--bg); color: var(--text); }
+.card.expanded .expand-btn { color: var(--tag-color, var(--muted)); }
+
+/* ── DRAG GRIP ── */
+.drag-grip {
+  position: absolute;
+  top: .6rem; right: .65rem;
+  color: var(--dim);
+  font-size: .75rem;
+  opacity: 0;
+  transition: opacity .15s;
+  pointer-events: none;
+  line-height: 1;
+}
+.card:hover .drag-grip { opacity: .6; }
+
+/* ── EMPTY ── */
+.empty { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; color: var(--dim); font-size: .95rem; }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 1rem 2rem;
+  font-size: .75rem;
+  color: var(--dim);
+  font-family: 'Fira Code', monospace;
+  border-top: 1.5px solid var(--border);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes votePop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+.vote-btn.pop { animation: votePop .28s cubic-bezier(.34,1.56,.64,1); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; padding: 0 1rem 4rem; }
+  header { padding: 2rem 1rem 1.5rem; }
+  .controls { padding: .8rem 1rem 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-logo">e@11</div>
+    <span class="brand-wordmark"><strong>engineering</strong>@eleven</span>
+  </div>
+  <p class="subtitle">Vote for the sessions you want most · drag to reorder · click to see what's inside.</p>
+</header>
+
+<div class="controls" id="controls">
+  <button class="pill active" data-filter="all">All sessions</button>
+  <div class="c-divider"></div>
+  <button class="pill hot-pill" data-filter="hot">🔥 Popular</button>
+  <button class="pill rec-pill" data-filter="rec">★ Recommended first</button>
+  <div class="c-divider"></div>
+  <button class="pill" data-filter="shell">Shell &amp; CLI</button>
+  <button class="pill" data-filter="bio">Bioinformatics</button>
+  <button class="pill" data-filter="code">Code Quality</button>
+  <button class="pill" data-filter="infra">Infrastructure</button>
+  <button class="pill" data-filter="data">Data &amp; DBs</button>
+  <button class="pill" data-filter="tools">Build &amp; Tools</button>
+  <button class="pill" data-filter="web">Web &amp; APIs</button>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<footer>engineering@eleven &nbsp;·&nbsp; drag cards to reprioritize &nbsp;·&nbsp; vote for what you want &nbsp;·&nbsp; click to expand</footer>
+
+<script>
+const CAT = {
+  shell: { label:'Shell & CLI',    color:'#d4522a', bg:'#fff2ee' },
+  bio:   { label:'Bioinformatics', color:'#2a9d8f', bg:'#edf7f6' },
+  code:  { label:'Code Quality',   color:'#b87d1a', bg:'#fdf8eb' },
+  infra: { label:'Infrastructure', color:'#c75740', bg:'#fff1ed' },
+  data:  { label:'Data & DBs',     color:'#8b45d4', bg:'#f5eeff' },
+  tools: { label:'Build & Tools',  color:'#2f6ed4', bg:'#eff5ff' },
+  web:   { label:'Web & APIs',     color:'#0a9e7a', bg:'#eafaf6' },
+};
+
+const SESSIONS = [
+  { id:'s01', num:'01', title:'Git & Branch Strategies',        cat:'shell', hot:false, rec:true,
+    desc:'Version control beyond the basics. Compare OneFlow vs GitFlow, debug with bisect, and build a branching strategy that fits your team.',
+    topics:['OneFlow vs GitFlow — tradeoffs & when to choose','git bisect for binary-search debugging','Interactive rebase, fixup commits, autosquash','Branch protection, signed commits','Monorepo patterns & submodules','Writing good commit messages (Conventional Commits)'] },
+
+  { id:'s02', num:'02', title:'Bash Mastery & Tricks',       cat:'shell', hot:false, rec:true,
+    desc:'History tricks, file descriptors, process substitution and job control. Shell scripting that doesn\'t embarrass you at code review.',
+    topics:['History expansion: !!, !$, ^old^new, HISTCONTROL','File descriptors: stdin/stdout/stderr, process substitution, flock','Job control: fg, bg, disown, nohup','Shell options: set -euo pipefail, traps, ERR/EXIT','Brace & parameter expansion tricks','Ricing: zsh + starship / fish shell — practical wins'] },
+
+
+  { id:'s04', num:'04', title:'GNU Parallel & Parallel Pipelines', cat:'shell', hot:false, rec:false,
+    desc:'Harness all your cores from the command line. Especially powerful in bioinformatics workflows where you need to fan out over many files.',
+    topics:['GNU parallel basics: {}, {.}, {/}, {//}','Slot control: -j, --load, --delay','Input sources: files, stdin, ::: and ::::','Resuming jobs: --joblog, --resume-failed','xargs vs parallel — when each wins','Bioinformatics patterns: per-sample parallelism'] },
+
+  { id:'s05', num:'05', title:'The Deep Command Line Belt',        cat:'shell', hot:true, rec:false,
+    desc:'Modern CLI tools that replace or enhance their POSIX counterparts — faster, smarter, composable. Plus: AI from the terminal.',
+    topics:['rg (ripgrep) — gitignore-aware grep','fd — sane find replacement','sd — sed replacement with Rust regex','fq — jq for binary formats','jq — full JSON on the command line','bat, delta, eza, zoxide, atuin','AI from the terminal: shell-gpt, llm'] },
+
+  { id:'s06', num:'06', title:'sed, awk & The Obscure Classics',   cat:'shell', hot:true, rec:false,
+    desc:'Ancient and powerful. One-liners that process gigabytes without breaking a sweat. When mawk beats Apache Spark.',
+    topics:['sed: addresses, s///, hold space, branching','awk: field splitting, BEGIN/END, associative arrays','bioawk — understands FASTA/FASTQ/SAM','tr, cut, comm, sort -k, join','Perl one-liners: -p, -n, -e, -i','mawk vs gawk — performance shootout'] },
+
+  { id:'s07', num:'07', title:'Regex Crash Course',                cat:'shell', hot:false, rec:false,
+    desc:'Regex isn\'t one thing. Globbing vs regex, POSIX BRE vs PCRE vs Python re — the dialects that trip everyone up.',
+    topics:['Globbing vs regex — completely different beasts','POSIX BRE vs ERE vs PCRE','Python re vs sed/grep — gotchas','Lookaheads, lookbehinds, non-greedy','Named capture groups across languages','Practical: bioinformatics pattern matching'] },
+
+  { id:'s08', num:'08', title:'Vim: Config to Craft',         cat:'shell', hot:false, rec:false,
+    desc:'Enough Vim to be comfortable on HPC, in git commit messages, and remote sessions. No deep-end required.',
+    topics:['The modal model — stop fighting it','Motions as a language: operator + motion','.vimrc essentials: syntax, number, hlsearch','Registers, macros, the . repeat trick','Plugin system: vim-plug, 5 essential plugins','When nano is just fine'] },
+
+  { id:'s09', num:'09', title:'Debugging Programs & Systems',      cat:'shell', hot:false, rec:false,
+    desc:'When your program does something wrong and you don\'t know why. strace, lsof, and friends for understanding what\'s happening.',
+    topics:['strace — every syscall your program makes','lsof — open files, sockets, file descriptors','xxd / hexdump — binary file inspection','iftop, nethogs, ss, tcpdump basics','It\'s always the DNS — dig, systemd-resolve','perf stat — quick CPU profiling'] },
+
+   { id:'s10', num:'10', title:'Bioinformatics File Format Wars',   cat:'bio',   hot:true, rec:false,
+     desc:'FASTA had comment syntax? GFF3 vs GTF chaos? VCF vs HGVS? The file formats of bioinformatics are a historical mess worth understanding.',
+     topics:['FASTA: comment syntax, wrapped vs unwrapped','FASTQ: quality encoding wars (Phred+33 vs +64)','SAM/BAM/CRAM — headers, CIGAR strings, flags','GFF3 vs GTF — the never-ending chaos','VCF deep dive, HGVS nomenclature','BED, bedGraph, bigWig, bigBed','HDF5 and netCDF for large matrices'] },
+
+//  { id:'s11', num:'11', title:'Core Bioinformatics Tools',         cat:'bio',   hot:false, rec:false,
+//    desc:'BLAST, samtools, bioawk, and genome browsers. The practical toolbox for working with sequence data.',
+//    topics:['BLAST: blastn/blastp/blastx, E-value, tabular output','samtools: view, sort, index, flagstat, depth','bioawk for FASTA/FASTQ/SAM processing','IGV: loading tracks, navigating, screenshots','BWA/bowtie2 alignment basics','bedtools intersect, merge, coverage'] },
+
+  { id:'s12', num:'12', title:'Biological Databases & APIs',       cat:'bio',   hot:false, rec:false,
+    desc:'NCBI Entrez, Ensembl REST, UniProt, and the XML soup underneath. Programmatic access without losing your mind.',
+    topics:['NCBI Entrez: esearch, efetch, elink, einfo','Biopython Entrez module patterns','XML parsing: ElementTree, lxml, XPath','Ensembl REST API — coordinates, features, VEP','UniProt API — programmatic access','Rate limiting, caching, being a good API citizen'] },
+
+  { id:'s13', num:'13', title:'Pytest & The Testing Mindset',      cat:'code',  hot:true, rec:true,
+    desc:'You will need tests. They will reduce your stress. Practical pytest patterns for research code and Django.',
+    topics:['Why tests: the verification and sleep argument','pytest anatomy: test_*.py, assert, fixtures','conftest.py, scope, parametrize','Mocking with monkeypatch and unittest.mock','Django testing: TestCase, Client, fixtures','Snakemake: unit test your rules, not the DAG','CI integration: tests on every push'] },
+
+  { id:'s14', num:'14', title:'Python Typing & OOP Fundamentals',  cat:'code',  hot:false, rec:false,
+    desc:'Type hints aren\'t just decoration — they\'re a thinking tool. Liskov, SOLID, and how OOP works when applied thoughtfully.',
+    topics:['Type hints: int, str, Optional, Union, list[T]','TypeVar, Generic, Protocol — structural typing','mypy basics: strict mode, ignore comments','Liskov Substitution Principle — what it means','SOLID principles: applied, not preached','Dataclasses vs attrs vs Pydantic'] },
+
+  { id:'s21', num:'21', title:'Code Review & Software Quality',  cat:'code',  hot:true, rec:true,
+    desc:'What makes code actually good? A practical guide to doing code reviews well, plus a tour through the quality attributes that matter — from SOLID to the ones nobody talks about.',
+    topics:[
+      'SOLID: Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion',
+      'Correctness — does it do what it says?',
+      'Readability — can someone else understand it in 6 months?',
+      'Maintainability — how easy is it to change?',
+      'Testability — can you verify it without heroics?',
+      'Robustness — does it fail gracefully?',
+      'Performance — is it fast enough, and do you know where it isn\'t?',
+      'Security — input validation, injection, least privilege',
+      'Consistency — naming, style, patterns across the codebase',
+      'Simplicity — is the complexity justified?',
+      'Coupling & cohesion — do things that change together live together?',
+      'DRY vs WET — when repetition is actually fine',
+      'YAGNI — you aren\'t gonna need it',
+      'How to give feedback that doesn\'t ruin relationships',
+      'Nit vs blocker vs suggestion — labelling review comments',
+      'What to look for first in a PR (architecture before style)',
+      'Automating the boring stuff: linters, formatters, pre-commit hooks',
+    ] },
+
+  { id:'s15', num:'15', title:'Django Deep Dive',                   cat:'web',   hot:false, rec:false,
+    desc:'If you write Django already, level up. Models, views, forms, DRF, and the bits that trip people up.',
+    topics:['MVT architecture — how Django thinks','ORM: queries, select_related, prefetch_related, N+1','Class-based vs function-based views','Django REST Framework: serializers, viewsets, routers','Authentication: session vs token vs JWT','Celery + Redis for async tasks','Management commands for operational tasks'] },
+
+  { id:'s16', num:'16', title:'REST, HTTP & Web Protocols',         cat:'web',   hot:false, rec:false,
+    desc:'What REST actually means (hint: most APIs aren\'t), HTTP under the hood, SFTP, and speaking the web fluently.',
+    topics:['HTTP/1.1 vs HTTP/2 — headers, multiplexing','REST constraints: what they are, why they matter','Status codes you should know cold','curl as a debugging tool — headers, auth, timing','SFTP vs SCP vs rsync vs rclone','OAuth2 flows — authorization code, client credentials'] },
+
+  { id:'s17', num:'17', title:'Database Design & Normalization',    cat:'data',  hot:false, rec:true,
+    desc:'Good schema design prevents years of pain. Normal forms, indexing strategies, common patterns, and the Django ORM.',
+    topics:['1NF, 2NF, 3NF — intuition, not memorization','When to denormalize and why','Indexing: B-tree, hash, partial, composite','EXPLAIN ANALYZE — reading query plans','Common patterns: audit tables, soft delete, JSONB','Django ORM: migrations, constraints, indexes'] },
+
+  { id:'s18', num:'18', title:'12-Factor App & Modern Deployment',  cat:'infra', hot:true, rec:true,
+    desc:'The Heroku rules for sane deployment. Tailored for research infrastructure with podman-compose, env vars, and logging.',
+    topics:['The 12 factors — applied to research apps','Config via environment variables — dotenv, secrets','podman-compose vs docker-compose','Stateless processes & attached resources','Logs as event streams — structured logging','Dev/prod parity — why it matters','Health checks, graceful shutdown, disposability'] },
+
+  { id:'s19', num:'19', title:'SystemD: More Than an Init System',  cat:'infra', hot:false, rec:false,
+    desc:'SystemD runs a lot of your HPC automation. Unit files, timers, journald, socket activation — the parts worth learning.',
+    topics:['Unit files: [Unit], [Service], [Install]','systemctl: start, enable, mask, reload','Timers as cron replacements — OnCalendar syntax','journalctl: -u, -f, --since, -o json','User systemd services (--user)','Resource control: MemoryMax, CPUQuota, IOWeight','Templated units: service@.service'] },
+
+//  { id:'s20', num:'20', title:'Compiling from Source & CMake',      cat:'tools', hot:false, rec:false,
+//    desc:'Installing things from the internet. CMake, autotools, Cargo — and when conda/mamba/apt just wins.',
+//    topics:['autotools: ./configure && make && make install','CMake: out-of-source builds, -DCMAKE_PREFIX_PATH','Reading a README.md build section critically','pkg-config, rpath, LD_LIBRARY_PATH problems','Cargo install — Rust toolchain basics','conda/mamba for scientific software','Static vs dynamic linking tradeoffs'] },
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let order  = SESSIONS.map(s => s.id);
+let votes  = Object.fromEntries(SESSIONS.map(s => [s.id, 0]));
+let filter = 'all';
+let dragSrc = null;
+let expanded = new Set();
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function getVisible() {
+  if (filter === 'all') return [...order];
+  if (filter === 'hot') return order.filter(id => SESSIONS.find(s=>s.id===id).hot);
+  if (filter === 'rec') return order.filter(id => SESSIONS.find(s=>s.id===id).rec);
+  return order.filter(id => SESSIONS.find(s=>s.id===id).cat === filter);
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function renderAll() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const visible = getVisible();
+
+  if (!visible.length) {
+    grid.innerHTML = '<div class="empty">No sessions match this filter.</div>';
+    return;
+  }
+
+  visible.forEach((id, i) => {
+    const s  = SESSIONS.find(x => x.id === id);
+    const cm = CAT[s.cat];
+    const isExp   = expanded.has(id);
+
+    const card = document.createElement('div');
+    card.className = 'card' + (isExp ? ' expanded' : '');
+    card.dataset.id = id;
+    card.draggable = true;
+    card.classList.add('card-init');
+    card.style.animationDelay = `${Math.min(i * 0.038, 0.6)}s`;
+    card.style.setProperty('--tag-color', cm.color);
+    card.style.setProperty('--tag-bg',    cm.bg);
+
+    const badgesHtml = [
+      s.hot ? '<span class="badge badge-hot">🔥 popular</span>' : '',
+      s.rec ? '<span class="badge badge-rec">★ first</span>'    : '',
+    ].filter(Boolean).join('');
+
+    card.innerHTML = `
+      <div class="drag-grip">⠿</div>
+      <div class="card-top">
+        <div>
+          <div class="card-num">#${s.num}</div>
+          <div class="card-title">${s.title}</div>
+        </div>
+        <span class="card-tag">${cm.label}</span>
+      </div>
+      ${badgesHtml ? `<div class="card-badges">${badgesHtml}</div>` : ''}
+      <p class="card-desc">${s.desc}</p>
+      <div class="topics"><ul>${s.topics.map(t=>`<li>${t}</li>`).join('')}</ul></div>
+      <div class="card-footer">
+        <div class="vote-wrap">
+          <button class="vote-btn${votes[id]>0?' voted':''}" data-action="vote">▲ vote</button>
+          <span class="vote-count">${votes[id]}</span>
+          <button class="vote-undo" data-action="unvote" style="display:${votes[id]>0?'inline-flex':'none'}">−</button>
+        </div>
+        <button class="expand-btn" data-action="expand">
+          ${isExp ? '▲ less' : '▼ more'}
+        </button>
+      </div>
+    `;
+
+    // ── EVENTS ──
+    card.addEventListener('click', e => {
+      const action = e.target.closest('[data-action]')?.dataset.action;
+      if (!action) return;
+
+      if (action === 'expand') {
+        isExp ? expanded.delete(id) : expanded.add(id);
+        card.classList.toggle('expanded');
+        e.target.textContent = card.classList.contains('expanded') ? '▲ less' : '▼ more';
+        if (card.classList.contains('expanded')) expanded.add(id);
+        else expanded.delete(id);
+      }
+
+      if (action === 'vote') {
+        votes[id]++;
+        const btn = card.querySelector('.vote-btn');
+        btn.classList.add('voted');
+        btn.classList.add('pop');
+        btn.addEventListener('animationend', () => btn.classList.remove('pop'), {once:true});
+        card.querySelector('.vote-count').textContent = votes[id];
+        card.querySelector('.vote-undo').style.display = 'inline-flex';
+      }
+
+      if (action === 'unvote') {
+        if (votes[id] > 0) {
+          votes[id]--;
+          card.querySelector('.vote-count').textContent = votes[id];
+          if (votes[id] === 0) {
+            card.querySelector('.vote-btn').classList.remove('voted');
+            card.querySelector('.vote-undo').style.display = 'none';
+          }
+        }
+      }
+    });
+
+    // ── DRAG ──
+    card.addEventListener('dragstart', e => {
+      dragSrc = card;
+      setTimeout(() => card.classList.add('dragging'), 0);
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', id);
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      grid.querySelectorAll('.card').forEach(c => {
+        c.classList.remove('drag-over-before', 'drag-over-after');
+      });
+      dragSrc = null;
+    });
+    card.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (!dragSrc || dragSrc === card) return;
+      grid.querySelectorAll('.card').forEach(c => {
+        c.classList.remove('drag-over-before', 'drag-over-after');
+      });
+      const rect = card.getBoundingClientRect();
+      const midX = rect.left + rect.width / 2;
+      if (e.clientX < midX) {
+        card.classList.add('drag-over-before');
+      } else {
+        card.classList.add('drag-over-after');
+      }
+    });
+    card.addEventListener('dragleave', e => {
+      // only clear if truly leaving the card (not entering a child)
+      if (!card.contains(e.relatedTarget)) {
+        card.classList.remove('drag-over-before', 'drag-over-after');
+      }
+    });
+    card.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragSrc || dragSrc === card) return;
+      const isBefore = card.classList.contains('drag-over-before');
+      card.classList.remove('drag-over-before', 'drag-over-after');
+
+      // Move DOM node directly — no re-render
+      if (isBefore) {
+        grid.insertBefore(dragSrc, card);
+      } else {
+        grid.insertBefore(dragSrc, card.nextSibling);
+      }
+
+      // Sync order array from DOM
+      order = Array.from(grid.querySelectorAll('.card')).map(c => c.dataset.id);
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+// ── FILTER BAR ─────────────────────────────────────────────────────────────
+document.getElementById('controls').addEventListener('click', e => {
+  if (!e.target.matches('.pill')) return;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  e.target.classList.add('active');
+  filter = e.target.dataset.filter;
+  renderAll();
+});
+
+renderAll();
+</script>
+</body>
+</html>
