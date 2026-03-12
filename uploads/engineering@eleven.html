@@ -480,12 +480,70 @@ const SESSIONS = [
 //    topics:['autotools: ./configure && make && make install','CMake: out-of-source builds, -DCMAKE_PREFIX_PATH','Reading a README.md build section critically','pkg-config, rpath, LD_LIBRARY_PATH problems','Cargo install — Rust toolchain basics','conda/mamba for scientific software','Static vs dynamic linking tradeoffs'] },
 ];
 
+// ── JSONBIN CONFIG — fill these in ─────────────────────────────────────────
+// 1. Go to jsonbin.io, create a free account
+// 2. Click "Create Bin", paste: {} and save → copy the Bin ID
+// 3. Go to API Keys → create a key → copy it
+const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/69b28729aa77b81da9daafe1'
+const JSONBIN_API_KEY = '$2a$10$2Vy0NLkUdVKEYQjxR/e.C.trrNx4AQv.HRDsXk0jyxqhhFD2Nd0JW';
+
 // ── STATE ──────────────────────────────────────────────────────────────────
-let order  = SESSIONS.map(s => s.id);
-let votes  = Object.fromEntries(SESSIONS.map(s => [s.id, 0]));
-let filter = 'all';
-let dragSrc = null;
+let order    = SESSIONS.map(s => s.id);
+let votes    = Object.fromEntries(SESSIONS.map(s => [s.id, 0]));
+let filter   = 'all';
+let dragSrc  = null;
 let expanded = new Set();
+let saveTimer = null;
+
+// ── JSONBIN: LOAD ───────────────────────────────────────────────────────────
+async function loadVotes() {
+  try {
+    const res = await fetch(JSONBIN_URL + '/latest', {
+      headers: { 'X-Master-Key': JSONBIN_API_KEY }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    const saved = data.record?.votes;
+    if (saved) {
+      // merge saved votes into local state (ignore unknown ids)
+      Object.keys(saved).forEach(id => {
+        if (id in votes) votes[id] = saved[id];
+      });
+      refreshAllVoteDisplays();
+    }
+  } catch(e) { console.warn('Could not load votes:', e); }
+}
+
+// ── JSONBIN: SAVE (debounced 800ms) ─────────────────────────────────────────
+function saveVotes() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    try {
+      await fetch(JSONBIN_URL, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': JSONBIN_API_KEY
+        },
+        body: JSON.stringify({ votes })
+      });
+    } catch(e) { console.warn('Could not save votes:', e); }
+  }, 800);
+}
+
+// ── UPDATE VOTE DISPLAY ON ALL RENDERED CARDS ───────────────────────────────
+function refreshAllVoteDisplays() {
+  document.querySelectorAll('.card').forEach(card => {
+    const id = card.dataset.id;
+    const count = votes[id] ?? 0;
+    const countEl = card.querySelector('.vote-count');
+    const btn     = card.querySelector('.vote-btn');
+    const undo    = card.querySelector('.vote-undo');
+    if (countEl) countEl.textContent = count;
+    if (btn)  btn.classList.toggle('voted', count > 0);
+    if (undo) undo.style.display = count > 0 ? 'inline-flex' : 'none';
+  });
+}
 
 // ── HELPERS ────────────────────────────────────────────────────────────────
 function getVisible() {
@@ -570,6 +628,7 @@ function renderAll() {
         btn.addEventListener('animationend', () => btn.classList.remove('pop'), {once:true});
         card.querySelector('.vote-count').textContent = votes[id];
         card.querySelector('.vote-undo').style.display = 'inline-flex';
+        saveVotes()
       }
 
       if (action === 'unvote') {
@@ -580,6 +639,7 @@ function renderAll() {
             card.querySelector('.vote-btn').classList.remove('voted');
             card.querySelector('.vote-undo').style.display = 'none';
           }
+          saveVotes()
         }
       }
     });
@@ -650,6 +710,7 @@ document.getElementById('controls').addEventListener('click', e => {
 });
 
 renderAll();
+loadVotes()
 </script>
 </body>
 </html>
