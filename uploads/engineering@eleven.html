@@ -261,7 +261,8 @@ h1 em {
   transition: all .15s ease;
   display: flex; align-items: center; gap: .3rem;
 }
-.vote-btn:hover { border-color: #ff6b35; color: #ff6b35; background: #fff4f1; }
+.vote-btn:hover:not(:disabled) { border-color: #ff6b35; color: #ff6b35; background: #fff4f1; }
+.vote-btn:disabled { cursor: default; opacity: .55; }
 .vote-btn.voted {
   background: linear-gradient(135deg, #ff6b35, #f7931e);
   border-color: transparent;
@@ -346,6 +347,7 @@ footer {
     <div class="brand-logo">e@11</div>
     <span class="brand-wordmark"><strong>engineering</strong>@eleven</span>
   </div>
+  <h1>Workshop<br><em>Curriculum</em></h1>
   <p class="subtitle">Vote for the sessions you want most · drag to reorder · click to see what's inside.</p>
 </header>
 
@@ -380,14 +382,13 @@ const CAT = {
 };
 
 const SESSIONS = [
-  { id:'s01', num:'01', title:'Git & Branch Strategies',        cat:'shell', hot:false, rec:true,
+  { id:'s01', num:'01', title:'Git & Branching Strategies',        cat:'shell', hot:false, rec:true,
     desc:'Version control beyond the basics. Compare OneFlow vs GitFlow, debug with bisect, and build a branching strategy that fits your team.',
     topics:['OneFlow vs GitFlow — tradeoffs & when to choose','git bisect for binary-search debugging','Interactive rebase, fixup commits, autosquash','Branch protection, signed commits','Monorepo patterns & submodules','Writing good commit messages (Conventional Commits)'] },
 
-  { id:'s02', num:'02', title:'Bash Mastery & Tricks',       cat:'shell', hot:false, rec:true,
+  { id:'s02', num:'02', title:'Bash Mastery & Shell Tricks',       cat:'shell', hot:false, rec:true,
     desc:'History tricks, file descriptors, process substitution and job control. Shell scripting that doesn\'t embarrass you at code review.',
-    topics:['History expansion: !!, !$, ^old^new, HISTCONTROL','File descriptors: stdin/stdout/stderr, process substitution, flock','Job control: fg, bg, disown, nohup','Shell options: set -euo pipefail, traps, ERR/EXIT','Brace & parameter expansion tricks','Ricing: zsh + starship / fish shell — practical wins'] },
-
+    topics:['History expansion: !!, !$, ^old^new, HISTCONTROL','File descriptors: stdin/stdout/stderr, process substitution','Job control: fg, bg, disown, nohup','Shell options: set -euo pipefail, traps, ERR/EXIT','Brace & parameter expansion tricks','Ricing: zsh + starship / fish shell — practical wins'] },
 
   { id:'s04', num:'04', title:'GNU Parallel & Parallel Pipelines', cat:'shell', hot:false, rec:false,
     desc:'Harness all your cores from the command line. Especially powerful in bioinformatics workflows where you need to fan out over many files.',
@@ -405,7 +406,7 @@ const SESSIONS = [
     desc:'Regex isn\'t one thing. Globbing vs regex, POSIX BRE vs PCRE vs Python re — the dialects that trip everyone up.',
     topics:['Globbing vs regex — completely different beasts','POSIX BRE vs ERE vs PCRE','Python re vs sed/grep — gotchas','Lookaheads, lookbehinds, non-greedy','Named capture groups across languages','Practical: bioinformatics pattern matching'] },
 
-  { id:'s08', num:'08', title:'Vim: Config to Craft',         cat:'shell', hot:false, rec:false,
+  { id:'s08', num:'08', title:'Vim: From Config to Craft',         cat:'shell', hot:false, rec:false,
     desc:'Enough Vim to be comfortable on HPC, in git commit messages, and remote sessions. No deep-end required.',
     topics:['The modal model — stop fighting it','Motions as a language: operator + motion','.vimrc essentials: syntax, number, hlsearch','Registers, macros, the . repeat trick','Plugin system: vim-plug, 5 essential plugins','When nano is just fine'] },
 
@@ -413,9 +414,9 @@ const SESSIONS = [
     desc:'When your program does something wrong and you don\'t know why. strace, lsof, and friends for understanding what\'s happening.',
     topics:['strace — every syscall your program makes','lsof — open files, sockets, file descriptors','xxd / hexdump — binary file inspection','iftop, nethogs, ss, tcpdump basics','It\'s always the DNS — dig, systemd-resolve','perf stat — quick CPU profiling'] },
 
-   { id:'s10', num:'10', title:'Bioinformatics File Format Wars',   cat:'bio',   hot:true, rec:false,
-     desc:'FASTA had comment syntax? GFF3 vs GTF chaos? VCF vs HGVS? The file formats of bioinformatics are a historical mess worth understanding.',
-     topics:['FASTA: comment syntax, wrapped vs unwrapped','FASTQ: quality encoding wars (Phred+33 vs +64)','SAM/BAM/CRAM — headers, CIGAR strings, flags','GFF3 vs GTF — the never-ending chaos','VCF deep dive, HGVS nomenclature','BED, bedGraph, bigWig, bigBed','HDF5 and netCDF for large matrices'] },
+  { id:'s10', num:'10', title:'Bioinformatics File Format Wars',   cat:'bio',   hot:true, rec:false,
+    desc:'FASTA had comment syntax? GFF3 vs GTF chaos? VCF vs HGVS? The file formats of bioinformatics are a historical mess worth understanding.',
+    topics:['FASTA: comment syntax, wrapped vs unwrapped','FASTQ: quality encoding wars (Phred+33 vs +64)','SAM/BAM/CRAM — headers, CIGAR strings, flags','GFF3 vs GTF — the never-ending chaos','VCF deep dive, HGVS nomenclature','BED, bedGraph, bigWig, bigBed','HDF5 and netCDF for large matrices'] },
 
 //  { id:'s11', num:'11', title:'Core Bioinformatics Tools',         cat:'bio',   hot:false, rec:false,
 //    desc:'BLAST, samtools, bioawk, and genome browsers. The practical toolbox for working with sequence data.',
@@ -433,27 +434,27 @@ const SESSIONS = [
     desc:'Type hints aren\'t just decoration — they\'re a thinking tool. Liskov, SOLID, and how OOP works when applied thoughtfully.',
     topics:['Type hints: int, str, Optional, Union, list[T]','TypeVar, Generic, Protocol — structural typing','mypy basics: strict mode, ignore comments','Liskov Substitution Principle — what it means','SOLID principles: applied, not preached','Dataclasses vs attrs vs Pydantic'] },
 
-  { id:'s21', num:'21', title:'Code Review & Software Quality',  cat:'code',  hot:true, rec:true,
-    desc:'What makes code actually good? A practical guide to doing code reviews well, plus a tour through the quality attributes that matter — from SOLID to the ones nobody talks about.',
-    topics:[
-      'SOLID: Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion',
-      'Correctness — does it do what it says?',
-      'Readability — can someone else understand it in 6 months?',
-      'Maintainability — how easy is it to change?',
-      'Testability — can you verify it without heroics?',
-      'Robustness — does it fail gracefully?',
-      'Performance — is it fast enough, and do you know where it isn\'t?',
-      'Security — input validation, injection, least privilege',
-      'Consistency — naming, style, patterns across the codebase',
-      'Simplicity — is the complexity justified?',
-      'Coupling & cohesion — do things that change together live together?',
-      'DRY vs WET — when repetition is actually fine',
-      'YAGNI — you aren\'t gonna need it',
-      'How to give feedback that doesn\'t ruin relationships',
-      'Nit vs blocker vs suggestion — labelling review comments',
-      'What to look for first in a PR (architecture before style)',
-      'Automating the boring stuff: linters, formatters, pre-commit hooks',
-    ] },
+//  { id:'s21', num:'21', title:'Code Review & Software Quality',  cat:'code',  hot:true, rec:true,
+//    desc:'What makes code actually good? A practical guide to doing code reviews well, plus a tour through the quality attributes that matter — from SOLID to the ones nobody talks about.',
+//    topics:[
+//      'SOLID: Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion',
+//      'Correctness — does it do what it says?',
+//      'Readability — can someone else understand it in 6 months?',
+//      'Maintainability — how easy is it to change?',
+//      'Testability — can you verify it without heroics?',
+//      'Robustness — does it fail gracefully?',
+//      'Performance — is it fast enough, and do you know where it isn\'t?',
+//      'Security — input validation, injection, least privilege',
+//      'Consistency — naming, style, patterns across the codebase',
+//      'Simplicity — is the complexity justified?',
+//      'Coupling & cohesion — do things that change together live together?',
+//      'DRY vs WET — when repetition is actually fine',
+//      'YAGNI — you aren\'t gonna need it',
+//      'How to give feedback that doesn\'t ruin relationships',
+//      'Nit vs blocker vs suggestion — labelling review comments',
+//      'What to look for first in a PR (architecture before style)',
+//      'Automating the boring stuff: linters, formatters, pre-commit hooks',
+//    ] },
 
   { id:'s15', num:'15', title:'Django Deep Dive',                   cat:'web',   hot:false, rec:false,
     desc:'If you write Django already, level up. Models, views, forms, DRF, and the bits that trip people up.',
@@ -478,14 +479,20 @@ const SESSIONS = [
 //  { id:'s20', num:'20', title:'Compiling from Source & CMake',      cat:'tools', hot:false, rec:false,
 //    desc:'Installing things from the internet. CMake, autotools, Cargo — and when conda/mamba/apt just wins.',
 //    topics:['autotools: ./configure && make && make install','CMake: out-of-source builds, -DCMAKE_PREFIX_PATH','Reading a README.md build section critically','pkg-config, rpath, LD_LIBRARY_PATH problems','Cargo install — Rust toolchain basics','conda/mamba for scientific software','Static vs dynamic linking tradeoffs'] },
+
+  { id:'s21', num:'21', title:'Agentic engineering',      cat:'tools', hot:false, rec:false,
+    desc:'Engineering software guided by AI agents',
+    topics:['How does an AI agent work', 'Ways to provide context', 'Managing the context'] },
 ];
+
 
 // ── JSONBIN CONFIG — fill these in ─────────────────────────────────────────
 // 1. Go to jsonbin.io, create a free account
 // 2. Click "Create Bin", paste: {} and save → copy the Bin ID
 // 3. Go to API Keys → create a key → copy it
-const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/69b28729aa77b81da9daafe1'
-const JSONBIN_API_KEY = '$2a$10$2Vy0NLkUdVKEYQjxR/e.C.trrNx4AQv.HRDsXk0jyxqhhFD2Nd0JW';
+const JSONBIN_BIN_ID  = 'YOUR_BIN_ID_HERE';
+const JSONBIN_API_KEY = 'YOUR_API_KEY_HERE';
+const JSONBIN_URL     = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let order    = SESSIONS.map(s => s.id);
@@ -495,8 +502,22 @@ let dragSrc  = null;
 let expanded = new Set();
 let saveTimer = null;
 
+// ── LOCAL VOTE TRACKING (one vote per topic per browser) ────────────────────
+// Stored in localStorage so it persists across page refreshes on same browser.
+const LS_KEY = 'e11_my_votes';
+function loadMyVotes() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); }
+  catch { return {}; }
+}
+function saveMyVotes(mv) {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(mv)); }
+  catch {}
+}
+let myVotes = loadMyVotes(); // e.g. { s01: true, s13: true }
+
 // ── JSONBIN: LOAD ───────────────────────────────────────────────────────────
 async function loadVotes() {
+  if (JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') return; // not configured yet
   try {
     const res = await fetch(JSONBIN_URL + '/latest', {
       headers: { 'X-Master-Key': JSONBIN_API_KEY }
@@ -516,6 +537,7 @@ async function loadVotes() {
 
 // ── JSONBIN: SAVE (debounced 800ms) ─────────────────────────────────────────
 function saveVotes() {
+  if (JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') return;
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
     try {
@@ -534,14 +556,19 @@ function saveVotes() {
 // ── UPDATE VOTE DISPLAY ON ALL RENDERED CARDS ───────────────────────────────
 function refreshAllVoteDisplays() {
   document.querySelectorAll('.card').forEach(card => {
-    const id = card.dataset.id;
-    const count = votes[id] ?? 0;
+    const id      = card.dataset.id;
+    const count   = votes[id] ?? 0;
+    const hasVoted = !!myVotes[id];
     const countEl = card.querySelector('.vote-count');
     const btn     = card.querySelector('.vote-btn');
     const undo    = card.querySelector('.vote-undo');
     if (countEl) countEl.textContent = count;
-    if (btn)  btn.classList.toggle('voted', count > 0);
-    if (undo) undo.style.display = count > 0 ? 'inline-flex' : 'none';
+    if (btn) {
+      btn.classList.toggle('voted', hasVoted);
+      btn.disabled = hasVoted;
+      btn.title = hasVoted ? 'You already voted for this one' : '';
+    }
+    if (undo) undo.style.display = hasVoted ? 'inline-flex' : 'none';
   });
 }
 
@@ -597,9 +624,9 @@ function renderAll() {
       <div class="topics"><ul>${s.topics.map(t=>`<li>${t}</li>`).join('')}</ul></div>
       <div class="card-footer">
         <div class="vote-wrap">
-          <button class="vote-btn${votes[id]>0?' voted':''}" data-action="vote">▲ vote</button>
+          <button class="vote-btn${myVotes[id]?' voted':''}" data-action="vote" ${myVotes[id]?'disabled title="You already voted for this one"':''}>▲ vote</button>
           <span class="vote-count">${votes[id]}</span>
-          <button class="vote-undo" data-action="unvote" style="display:${votes[id]>0?'inline-flex':'none'}">−</button>
+          <button class="vote-undo" data-action="unvote" style="display:${myVotes[id]?'inline-flex':'none'}">−</button>
         </div>
         <button class="expand-btn" data-action="expand">
           ${isExp ? '▲ less' : '▼ more'}
@@ -621,25 +648,33 @@ function renderAll() {
       }
 
       if (action === 'vote') {
+        if (myVotes[id]) return; // already voted on this topic
         votes[id]++;
+        myVotes[id] = true;
+        saveMyVotes(myVotes);
         const btn = card.querySelector('.vote-btn');
         btn.classList.add('voted');
+        btn.disabled = true;
+        btn.title = 'You already voted for this one';
         btn.classList.add('pop');
         btn.addEventListener('animationend', () => btn.classList.remove('pop'), {once:true});
         card.querySelector('.vote-count').textContent = votes[id];
         card.querySelector('.vote-undo').style.display = 'inline-flex';
-        saveVotes()
+        saveVotes();
       }
 
       if (action === 'unvote') {
-        if (votes[id] > 0) {
+        if (myVotes[id] && votes[id] > 0) {
           votes[id]--;
+          delete myVotes[id];
+          saveMyVotes(myVotes);
+          const btn = card.querySelector('.vote-btn');
+          btn.classList.remove('voted');
+          btn.disabled = false;
+          btn.title = '';
           card.querySelector('.vote-count').textContent = votes[id];
-          if (votes[id] === 0) {
-            card.querySelector('.vote-btn').classList.remove('voted');
-            card.querySelector('.vote-undo').style.display = 'none';
-          }
-          saveVotes()
+          card.querySelector('.vote-undo').style.display = 'none';
+          saveVotes();
         }
       }
     });
@@ -707,10 +742,11 @@ document.getElementById('controls').addEventListener('click', e => {
   e.target.classList.add('active');
   filter = e.target.dataset.filter;
   renderAll();
+  refreshAllVoteDisplays();
 });
 
 renderAll();
-loadVotes()
+loadVotes().then(refreshAllVoteDisplays);
 </script>
 </body>
 </html>
