@@ -516,7 +516,6 @@ let myVotes = loadMyVotes(); // e.g. { s01: true, s13: true }
 
 // ── JSONBIN: LOAD ───────────────────────────────────────────────────────────
 async function loadVotes() {
-  if (JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') return; // not configured yet
   try {
     const res = await fetch(JSONBIN_URL + '/latest', {
       headers: { 'X-Master-Key': JSONBIN_API_KEY }
@@ -536,7 +535,6 @@ async function loadVotes() {
 
 // ── JSONBIN: SAVE (debounced 800ms) ─────────────────────────────────────────
 function saveVotes() {
-  if (JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') return;
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
     try {
