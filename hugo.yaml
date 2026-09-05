@@ -1,0 +1,109 @@
+baseURL: "https://hielkewalinga.nl/"
+title: "Hielke Walinga"
+pagerSize: 5
+theme: PaperMod
+
+enableRobotsTXT: true
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+minify:
+  minifyOutput: false
+
+params:
+  env: production
+  title: Hielke Walinga
+  description: "Hielke Walinga"
+  keywords: [Blog, Portfolio, PaperMod]
+  author: Hielke Walinga
+  DateFormat: "January 2, 2006"
+  defaultTheme: auto # dark, light, auto
+  disableThemeToggle: false
+
+  ShowReadingTime: true
+  ShowShareButtons: false
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  UseHugoToc: true
+  disableSpecial1stPost: false
+  disableScrollToTop: false
+  comments: true
+  hidemeta: false
+  hideSummary: false
+  hideFooter: true
+  showtoc: true
+  tocopen: true
+
+  assets:
+    # disableFingerprinting: true
+    favicon: "/favicon.ico"
+    favicon16x16: "/favicon-16x16.png"
+    favicon32x32: "/favicon-32x32.png"
+    apple_touch_icon: "/apple-touch-icon.png"
+
+  profileMode:
+    enabled: true
+    title: Hielke Walinga
+    subtitle: "Bioinformatician at Human Genetics Amsterdam AUMC  \nbuilding diagnostic workflows and tooling  \nin Django/React/Podman and Snakemake/Bash.  \n[Curriculum Vitae](/uploads/hielke_walinga_cv.pdf)"
+    imageUrl: "/images/myself.jpeg"
+    imageWidth: 120
+    imageHeight: 120
+    buttons:
+      - name: Posts
+        url: posts
+      - name: Slides
+        url: slides
+
+  socialIcons:
+    - name: email
+      url: 'mailto:hielkewalinga@gmail.com'
+    - name: github
+      url: "https://github.com/hwalinga"
+    - name: linkedin
+      url: "https://www.linkedin.com/in/hielke-walinga-606388105/"
+    - name: stackoverflow
+      url: 'https://stackoverflow.com/users/8477066/hielke-walinga'
+
+  cover:
+    hidden: false
+    hiddenInList: false
+    hiddenInSingle: false
+
+menu:
+  main:
+    - identifier: about
+      name: About
+      url: /about/
+      weight: 80
+    - identifier: posts
+      name: Posts
+      url: /posts/
+      weight: 10
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 35
+    - identifier: slides
+      name: Slides
+      url: /slides/
+      weight: 20
+    - identifier: search
+      name: Search
+      url: /search/
+      weight: 50
+    - identifier: cv
+      name: CV
+      url: /uploads/hielke_walinga_cv.pdf
+      weight: 60
+

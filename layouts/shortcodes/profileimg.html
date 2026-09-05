@@ -1,0 +1,7 @@
+{{- $img := resources.Get (.Get "src") -}}
+{{- $w := .Get "width" | default 120 -}}
+{{- $h := .Get "height" | default 120 -}}
+{{- if $img -}}
+  {{- $img = $img.Resize (printf "%dx%d" (int $w) (int $h)) -}}
+  <img src="{{ $img.Permalink }}" alt="{{ .Get "alt" }}" width="{{ $w }}" height="{{ $h }}" />
+{{- end -}}

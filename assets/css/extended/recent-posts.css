@@ -1,0 +1,32 @@
+.recent-posts {
+    margin-top: 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+}
+
+.recent-posts h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.recent-posts ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.recent-posts li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.recent-posts time {
+    color: var(--secondary);
+    font-size: 14px;
+    white-space: nowrap;
+}

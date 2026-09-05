@@ -1,0 +1,60 @@
+/* Accent color sampled from the profile image (warm caramel) */
+:root {
+  --accent: #b87a3c;
+  --accent-hover: #9c6430;
+}
+
+:root[data-theme="dark"] {
+  --accent: #cb945c;
+  --accent-hover: #dcab77;
+}
+
+/* --- Header / menu bar --- */
+.header {
+  border-bottom: 2px solid var(--accent);
+}
+
+.menu a:hover {
+  color: var(--accent);
+}
+
+.menu .active {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+/* --- Links in profile subtitle --- */
+.profile .profile_inner span a {
+  color: var(--accent);
+}
+
+.profile .profile_inner span a:hover {
+  color: var(--accent-hover);
+}
+
+/* --- Profile buttons --- */
+.button:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* --- Links inside post content --- */
+.post-content a:not(.anchor) {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+.post-content a:not(.anchor):hover {
+  color: var(--accent-hover);
+}
+
+/* --- Post title hover --- */
+.entry-header h1 a:hover,
+.entry-header h2 a:hover {
+  color: var(--accent);
+}
+
+/* --- Scroll-to-top button --- */
+.top-link:hover {
+  color: var(--accent);
+}
