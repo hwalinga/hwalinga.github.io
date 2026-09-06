@@ -5,3 +5,42 @@
     z-index: 2;
   }
 </style>
+
+{{- /* Opt-in light (white) code blocks per page: set `lightCode: true` in front matter.
+       The token colours come from the per-fence `{style=github}` highlight option;
+       this only defeats the theme's dark-background !important rules. */ -}}
+{{- if .Param "lightCode" }}
+<style>
+  .md-content .highlight:not(table),
+  .md-content .highlight pre,
+  .md-content pre code {
+    background: #fff !important;
+  }
+  .md-content pre code {
+    color: #1f2328;
+  }
+  .md-content .highlight:not(table) {
+    border: 1px solid #d0d7de;
+  }
+</style>
+{{- end }}
+
+{{- /* KaTeX math rendering: set `math: true` in a page's front matter.
+       Goldmark's passthrough extension (configured in hugo.yaml) keeps the
+       $…$, $$…$$, \(…\) and \[…\] delimiters intact for KaTeX to pick up. */ -}}
+{{- if .Param "math" }}
+{{- $katexVersion := "0.16.11" }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@{{ $katexVersion }}/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@{{ $katexVersion }}/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@{{ $katexVersion }}/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload='renderMathInElement(document.body, {
+    delimiters: [
+      { left: "$$", right: "$$", display: true },
+      { left: "\\[", right: "\\]", display: true },
+      { left: "$", right: "$", display: false },
+      { left: "\\(", right: "\\)", display: false }
+    ],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false
+  });'></script>
+{{- end }}

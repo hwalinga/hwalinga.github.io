@@ -2,6 +2,7 @@
 :root {
   --accent: #b87a3c;
   --accent-hover: #9c6430;
+  --main-width: 820px; /* theme default is 720px */
 }
 
 :root[data-theme="dark"] {
@@ -26,6 +27,9 @@
 /* --- Links in profile subtitle --- */
 .profile .profile_inner span a {
   color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.3rem;
 }
 
 .profile .profile_inner span a:hover {
@@ -48,6 +52,17 @@
   color: var(--accent-hover);
 }
 
+/* --- Footnote markers and back-references: no underline --- */
+.md-content a.footnote-ref:not(.anchor),
+.md-content a.footnote-backref:not(.anchor) {
+  text-decoration: none;
+}
+
+/* --- Blockquotes --- */
+.post-content blockquote {
+  border-inline-start-color: var(--accent);
+}
+
 /* --- Post title hover --- */
 .entry-header h1 a:hover,
 .entry-header h2 a:hover {
@@ -57,4 +72,23 @@
 /* --- Scroll-to-top button --- */
 .top-link:hover {
   color: var(--accent);
+}
+
+/* --- Table of contents as a left sidebar on wide screens --- */
+@media (min-width: 1400px) {
+  .post-single > details.toc {
+    position: fixed;
+    top: 120px;
+    left: 1.5rem;
+    width: 260px;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    margin: 0;
+    z-index: 10;
+  }
+
+  .post-single > details.toc .inner {
+    margin: 0 1.2rem;
+    overflow: visible;
+  }
 }

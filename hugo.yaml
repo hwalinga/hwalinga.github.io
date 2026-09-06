@@ -18,6 +18,29 @@ buildExpired: false
 minify:
   minifyOutput: false
 
+markup:
+  goldmark:
+    extensions:
+      # `extras.subscript` needs the GFM strikethrough extension off (single `~`
+      # would otherwise be strikethrough). `extras.delete` restores `~~del~~`.
+      strikethrough: false
+      extras:
+        delete:
+          enable: true
+        subscript:
+          enable: true
+        superscript:
+          enable: true
+      passthrough:
+        enable: true
+        delimiters:
+          block:
+            - ["\\[", "\\]"]
+            - ["$$", "$$"]
+          inline:
+            - ["\\(", "\\)"]
+            - ["$", "$"]
+
 params:
   env: production
   title: Hielke Walinga
