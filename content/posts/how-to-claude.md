@@ -3,7 +3,7 @@ title: "How do I Claude"
 summary: "Example of my Claude workflow"
 tags: ["AI"]
 date: 2026-09-06
-draft: true
+draft: false
 showToc: true
 TocOpen: true
 math: true

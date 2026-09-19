@@ -4,7 +4,7 @@ description: "And more ways to install stuff without sudo"
 summary: "Examples of how to get stuff on your PC without using sudo"
 tags: ["devops"]
 date: 2026-09-17
-draft: true
+draft: false
 showToc: true
 TocOpen: true
 math: true
