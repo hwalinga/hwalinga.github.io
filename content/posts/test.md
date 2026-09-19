@@ -1,14 +1,15 @@
-+++
-date = '2026-09-05T18:20:17+02:00'
-draft = false
-title = 'Test'
-tags = ["test"]
-weight = 1
-showToc = false
-TocOpen = false
-hidemeta = true
-comments = true
-+++
+---
+title: "Test"
+summary: "Test"
+tags: ["test"]
+date: 2026-09-05
+draft: true
+showToc: true
+TocOpen: true
+math: true
+lightCode: true
+comments: true
+---
 
 # Test
 

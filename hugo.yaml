@@ -19,6 +19,8 @@ minify:
   minifyOutput: false
 
 markup:
+  highlight:
+    style: github
   goldmark:
     extensions:
       # `extras.subscript` needs the GFM strikethrough extension off (single `~`

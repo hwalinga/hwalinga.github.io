@@ -6,6 +6,6 @@ cover:
   hidden: true
 ---
 
-An internal talk on Rust: ownership, borrowing, traits, and the tooling around cargo. A `beamer` presentation.
+A not so serious Rust presentation for our internal "powerpoint party". A `beamer` presentation.
 
 [Download the slides (PDF)](/uploads/rust-talk.pdf)
