@@ -78,7 +78,7 @@ The finished plan should contain:
 ```
 
 I prefer these over skills but they are very much the same. 
-The difference is that skills can trigger whenever, but commands have to mindfully triggered. 
+The difference is that skills can trigger whenever, but commands have to be mindfully triggered. 
 Skills can just as easy be used as commands, and commands are even considered deprecated!
 But as I like control, I obviously prefer commands over skills as long as that is supported. (But I also use skills when I think that is a good use.)
 
@@ -153,7 +153,7 @@ If you have other people not using Claude but something else you can have `@AGEN
 
 [^agents]: Now it seems that in the latest release you can configure this.
 
-Personally, this would more be project index. As for most things, other developer operations should be automated as much as possible!
+Personally, this would be more like a project index. As for most things, other developer operations should be automated as much as possible!
 
 For example, do not instruct CC how to activate the environment, but just use something as [direnv](https://github.com/direnv/direnv) to always do that.
 
@@ -165,6 +165,8 @@ I stole the initial status from the openrouter example to show openrouter usage.
 Now that unfortunately did not work very well. (I think it just updated too slow and CC give it a timeout.)
 
 But I did edit to show Claude usage and context size which I think is just as useful!
+
+You can take a look from my [dotfiles](github.com/hwalinga/dotfiles) for `statusline.*`.
 
 # Example
 
@@ -242,6 +244,77 @@ So I usually split the terminal (`tmux`) and read hackernews next to it.[^5]
 Of course you can also do something else, but to not get too distracted I want to be notified when it is done. 
 So I have a notification script for that you can edit in the settings.
 
+Configuring notification as follows in `~/.claude/settings.json`:
+
+```js
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-noti.sh Claude needs permission",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-noti.sh Claude has finish working",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-noti.sh Claude has compacted the conversation",
+            "async": true
+          }
+        ]
+      }
+    ]
+  },
+```
+
+And it then runs this notification script: 
+
+```sh
+#!/usr/bin/env bash
+# claude_notify.sh
+# Reads a Claude tool-use JSON event from stdin and pops a yad notification.
+# Usage: echo '<json>' | ./claude_notify.sh "Claude has finished working"
+
+set -euo pipefail
+
+prefix="$*"
+
+msg=$(jq -r --arg prefix "$prefix" '
+  (.tool_input.command // .tool_input.file_path // "") as $arg
+  | if .tool_name then
+      "\($prefix): \(.tool_name)" + (if $arg == "" then "" else "(\($arg))" end)
+    else
+      $prefix
+    end
+') || msg="$prefix"
+
+[[ -n $msg ]] || msg="$prefix"
+
+yad \
+  --text="$msg" \
+  --title="Claude" \
+  --text-align=center \
+```
+
+This uses yad, but you can of course configure it send you a notification via any possible means you want.
+
 ### The human verification
 
 Now it is time to read the code. I consider this much more important (and also interesting) then reading the plan.
@@ -281,8 +354,8 @@ $ARGUMENTS
 # Conclusion
 
 I do not know if this was much faster than doing it manually. I am also still pretty close to all the code (not really vibing it). 
-My current stance on AI assistance that it can help me learn more about the codebase I might miss doing it manually.
-(Allthough I do learn different things then going manually through the code, like actually remembering path names and so, and assessing whether changing features is still easy enough.)
+My current stance on AI assistance is that it can help me learn more about the codebase which I might miss when doing it manually.
+(Allthough I do learn different things when going manually through the code, like actually remembering path names and so, and assessing whether changing features is still easy enough.)
 
 What mostly helps a lot is the AI assistant coding increases the quality and consistency of the code.
 Often the AI points out some other things I might have not considered when doing it myself.

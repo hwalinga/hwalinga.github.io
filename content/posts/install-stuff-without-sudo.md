@@ -89,6 +89,18 @@ issues you sometimes have with conda.
 
 For more pixi see my slides [here](/slides/pixi-presentation/)
 
+## Brew is not really a package manager
+
+One thing that makes brew very different from other package managers is that it not really tries to deal with different versions
+and how different versions dependent on each other.
+This can be a hard problem for other package managers, but for brew it just tries to give you an install that is as new as possible.
+That can be a good thing sometimes and sometimes you really need this resolution.
+
+One problematic case in which brew wins here is for `bcftools`. 
+`bcftools` has a problem with its dependencies and that means that the newest version
+you install today with `pixi global install bcftools` is `1.2`.
+However, with `brew install bcftools` you get the newest `1.24` just fine.
+
 ## `mise use -g`
 
 Final shootout to `mise` which is more then just install software, 
